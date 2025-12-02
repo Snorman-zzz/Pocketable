@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Todo List</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Todo List</h1>
+            <p class="subtitle">Stay organized and productive</p>
+        </header>
+
+        <main class="main">
+            <form class="todo-form" id="todoForm">
+                <div class="input-group">
+                    <input
+                        type="text"
+                        id="todoInput"
+                        placeholder="Add a new task..."
+                        required
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="add-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+
+            <section class="todo-section">
+                <div class="filter-tabs">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="pending">Active</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                </div>
+
+                <ul class="todo-list" id="todoList">
+                    <!-- Todo items will be dynamically added here -->
+                </ul>
+
+                <div class="todo-stats" id="todoStats">
+                    <span class="stats-text">0 tasks remaining</span>
+                    <button class="clear-completed" id="clearCompleted">Clear completed</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

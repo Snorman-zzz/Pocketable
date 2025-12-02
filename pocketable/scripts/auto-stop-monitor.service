@@ -1,0 +1,29 @@
+[Unit]
+Description=Daytona Auto-Stop Monitoring Service
+After=network.target docker.service
+Wants=docker.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/ubuntu
+ExecStart=/usr/bin/python3 /home/ubuntu/auto-stop-monitor.py
+Restart=on-failure
+RestartSec=30
+
+# Environment variables
+Environment="IDLE_THRESHOLD_MINUTES=120"
+Environment="CHECK_INTERVAL_SECONDS=300"
+Environment="BACKEND_URL=http://localhost:3001"
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=auto-stop-monitor
+
+# Security
+NoNewPrivileges=false
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

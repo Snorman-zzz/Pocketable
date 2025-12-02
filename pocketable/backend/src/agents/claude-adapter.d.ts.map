@@ -1,0 +1,1 @@
+{"version":3,"file":"claude-adapter.d.ts","sourceRoot":"","sources":["claude-adapter.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,QAAQ,EAAE,WAAW,EAAE,SAAS,EAAE,MAAM,SAAS,CAAC;AAEhE,qBAAa,aAAc,YAAW,QAAQ;IAC5C,OAAO,CAAC,MAAM,CAAY;;IAUnB,IAAI,CAAC,MAAM,EAAE,MAAM,EAAE,OAAO,EAAE,WAAW,GAAG,qBAAqB,CAAC,SAAS,CAAC;IAuFnF,OAAO,CAAC,iBAAiB;IAwBzB,OAAO,CAAC,aAAa;CA0BtB"}

@@ -1,0 +1,121 @@
+// This is your Prisma schema file
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  email            String    @unique
+  passwordHash     String?   @map("password_hash")
+  fullName         String    @map("full_name")
+
+  // OAuth fields
+  googleId         String?   @unique @map("google_id")
+  appleId          String?   @unique @map("apple_id")
+  provider         String?   // 'email', 'google', 'apple'
+
+  // Password reset
+  resetToken       String?   @unique @map("reset_token")
+  resetTokenExpiry DateTime? @map("reset_token_expiry")
+
+  // Timestamps
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  projects         Project[]
+
+  @@map("users")
+}
+
+model Project {
+  id                  String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  userId              String    @map("user_id") @db.Uuid
+  name                String
+  description         String?
+  model               String    // 'claude' | 'gpt'
+  snackUrl            String?   @map("snack_url")
+  snackId             String?   @map("snack_id")
+  filesHash           String?   @map("files_hash")
+  lastSnackGenerated  DateTime? @map("last_snack_generated_at")
+  currentSnapshotId   String?   @map("current_snapshot_id") @db.Uuid
+  activeSandboxId     String?   @map("active_sandbox_id")
+  createdAt           DateTime  @default(now()) @map("created_at")
+  updatedAt           DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  files               ProjectFile[]
+  messages            ChatMessage[]
+  snapshots           CodeSnapshot[]
+
+  @@index([userId])
+  @@index([updatedAt(sort: Desc)])
+  @@map("projects")
+}
+
+model ProjectFile {
+  id          String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  projectId   String   @map("project_id") @db.Uuid
+  filePath    String   @map("file_path")
+  content     String
+  language    String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, filePath])
+  @@index([projectId])
+  @@map("project_files")
+}
+
+model ChatMessage {
+  id                 String    @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  projectId          String    @map("project_id") @db.Uuid
+  role               String    // 'user' | 'assistant' | 'system'
+  content            String
+  model              String?
+  reasoning          String?
+  filesSummary       Json?     @map("files_summary")
+  isEditCard         Boolean   @default(false) @map("is_edit_card")
+  snapshotId         String?   @map("snapshot_id") @db.Uuid
+  routingIntent      String?   @map("routing_intent")
+  routingConfidence  Float?    @map("routing_confidence")
+  routerModel        String?   @map("router_model")
+  createdAt          DateTime  @default(now()) @map("created_at")
+
+  // Relations
+  project            Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([createdAt(sort: Desc)])
+  @@index([isEditCard], map: "idx_chat_messages_is_edit_card")
+  @@index([routingIntent])
+  @@map("chat_messages")
+}
+
+model CodeSnapshot {
+  id           String   @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  projectId    String   @map("project_id") @db.Uuid
+  messageId    String?  @map("message_id") @db.Uuid
+  files        Json     // { "App.tsx": "content", ... }
+  sandboxId    String?  @map("sandbox_id")
+  previewUrl   String?  @map("preview_url")
+  buildStatus  String   @default("success") @map("build_status") // 'success' | 'failed' | 'pending'
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  // Relations
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([messageId])
+  @@index([createdAt(sort: Desc)])
+  @@map("code_snapshots")
+}

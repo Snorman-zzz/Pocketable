@@ -1,0 +1,109 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+const sdk_1 = require("@daytonaio/sdk");
+const dotenv = __importStar(require("dotenv"));
+const path = __importStar(require("path"));
+// Load environment variables
+dotenv.config({ path: path.join(__dirname, "../../.env") });
+async function startDevServer(sandboxId, projectPath = "expo-project") {
+    if (!process.env.DAYTONA_API_KEY) {
+        console.error("ERROR: DAYTONA_API_KEY must be set");
+        process.exit(1);
+    }
+    const daytona = new sdk_1.Daytona({
+        apiKey: process.env.DAYTONA_API_KEY,
+    });
+    try {
+        // Get sandbox
+        const sandboxes = await daytona.list();
+        const sandbox = sandboxes.find((s) => s.id === sandboxId);
+        if (!sandbox) {
+            throw new Error(`Sandbox ${sandboxId} not found`);
+        }
+        console.log(`✓ Found sandbox: ${sandboxId}`);
+        const rootDir = await sandbox.getUserRootDir();
+        const projectDir = `${rootDir}/${projectPath}`;
+        // Check if project exists
+        const checkProject = await sandbox.process.executeCommand(`test -d ${projectPath} && echo "exists" || echo "not found"`, rootDir);
+        if (checkProject.result?.trim() !== "exists") {
+            throw new Error(`Project directory ${projectPath} not found in sandbox`);
+        }
+        // Kill any existing dev server
+        console.log("Stopping any existing dev server...");
+        await sandbox.process.executeCommand("pkill -f 'expo start' || true", projectDir);
+        // Start dev server in background
+        console.log("Starting Expo development server...");
+        await sandbox.process.executeCommand(`nohup npx expo start --web --port 3000 > dev-server.log 2>&1 &`, projectDir, { PORT: "3000" });
+        console.log("✓ Server started in background");
+        // Wait for server to start
+        console.log("Waiting for server to initialize...");
+        await new Promise((resolve) => setTimeout(resolve, 10000));
+        // Check if server is running
+        const checkServer = await sandbox.process.executeCommand("curl -s -o /dev/null -w '%{http_code}' http://localhost:3000 || echo 'failed'", projectDir);
+        if (checkServer.result?.trim() === '200') {
+            console.log("✓ Server is running!");
+            // Get preview URL
+            const preview = await sandbox.getPreviewLink(3000);
+            console.log("\n🌐 Preview URL:");
+            console.log(preview.url);
+            if (preview.token) {
+                console.log(`\n🔑 Access Token: ${preview.token}`);
+            }
+        }
+        else {
+            console.log("⚠️  Server might still be starting...");
+            console.log("Check logs by SSHing into the sandbox and running:");
+            console.log(`cat ${projectPath}/dev-server.log`);
+        }
+    }
+    catch (error) {
+        console.error("Failed to start dev server:", error.message);
+        process.exit(1);
+    }
+}
+// Main execution
+async function main() {
+    const sandboxId = process.argv[2];
+    const projectPath = process.argv[3] || "expo-project";
+    if (!sandboxId) {
+        console.error("Usage: npx tsx scripts/start-dev-server.ts <sandbox-id> [project-path]");
+        console.error("Example: npx tsx scripts/start-dev-server.ts 7a517a82-942c-486b-8a62-6357773eb3ea");
+        process.exit(1);
+    }
+    await startDevServer(sandboxId, projectPath);
+}
+main();
+//# sourceMappingURL=start-dev-server.js.map

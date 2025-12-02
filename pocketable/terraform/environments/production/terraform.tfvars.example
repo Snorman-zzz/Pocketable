@@ -1,0 +1,13 @@
+# AWS Configuration
+aws_region = "us-east-1"
+
+# Docker Image Tag
+image_tag = "latest"
+
+# API Keys (SENSITIVE - Do not commit to git!)
+anthropic_api_key = "sk-ant-api03-YOUR_KEY_HERE"
+openai_api_key    = "sk-proj-YOUR_KEY_HERE"
+daytona_api_key   = "dtn_YOUR_KEY_HERE"
+
+# Optional: Email for CloudWatch alarms
+# alarm_email = "your-email@example.com"

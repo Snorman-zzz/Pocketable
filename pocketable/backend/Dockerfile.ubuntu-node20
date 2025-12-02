@@ -1,0 +1,29 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install dependencies (same as official Daytona snapshots)
+RUN apt-get update && \
+    apt-get install -y curl socat libgit2-1.1 ca-certificates && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Daytona daemon binary (toolbox)
+RUN curl -fsSL https://github.com/daytonaio/daytona/releases/download/v0.110.0/daemon-amd64 -o /usr/local/bin/daytona && \
+    chmod +x /usr/local/bin/daytona
+
+# Verify installations
+RUN node --version && npm --version && /usr/local/bin/daytona version || echo "Daytona daemon installed"
+
+WORKDIR /root
+
+CMD ["tail", "-f", "/dev/null"]
+
+LABEL description="Ubuntu 22.04 with Node.js 20 and Daytona daemon pre-installed for Pocketable"
+LABEL version="1.0"

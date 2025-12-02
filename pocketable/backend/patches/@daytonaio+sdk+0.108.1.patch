@@ -1,0 +1,21 @@
+diff --git a/node_modules/@daytonaio/sdk/src/Daytona.js b/node_modules/@daytonaio/sdk/src/Daytona.js
+index 42f89d5..57e5e1c 100644
+--- a/node_modules/@daytonaio/sdk/src/Daytona.js
++++ b/node_modules/@daytonaio/sdk/src/Daytona.js
+@@ -100,11 +100,12 @@ class Daytona {
+         }
+         this.apiUrl = apiUrl || 'https://app.daytona.io/api';
+         const orgHeader = {};
+-        if (!this.apiKey) {
+-            if (!this.organizationId) {
+-                throw new DaytonaError_1.DaytonaError('Organization ID is required when using JWT token');
+-            }
++        // Add organization header when organizationId is provided (for both API key and JWT auth)
++        if (this.organizationId) {
+             orgHeader['X-Daytona-Organization-ID'] = this.organizationId;
++        } else if (!this.apiKey) {
++            // Only require organizationId for JWT authentication
++            throw new DaytonaError_1.DaytonaError('Organization ID is required when using JWT token');
+         }
+         const configuration = new api_client_1.Configuration({
+             basePath: this.apiUrl,

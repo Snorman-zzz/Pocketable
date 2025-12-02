@@ -1,0 +1,24 @@
+# Copy this file to terraform.tfvars and fill in your values
+# cp terraform.tfvars.example terraform.tfvars
+
+aws_region = "us-east-1"
+
+instance_type = "t3.xlarge"  # 4 vCPU, 16GB RAM - required for Daytona
+
+data_volume_size = 100  # GB - for Docker images and Daytona data
+
+# SSH Key Configuration
+ssh_key_name         = "pocketable-daytona-dev"
+create_ssh_key       = false  # Set to true if key doesn't exist
+ssh_public_key_path  = "~/.ssh/pocketable-daytona-dev.pub"
+
+# Security: Restrict SSH access to your IP
+# Get your IP: curl ifconfig.me
+allowed_ssh_cidrs = ["0.0.0.0/0"]  # WARNING: Change this to your IP/32
+
+# API Keys (from backend/.env)
+anthropic_api_key = "sk-ant-api03-..."
+openai_api_key    = "sk-proj-..."
+
+# Auto-stop feature
+enable_auto_stop = true
