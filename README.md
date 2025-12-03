@@ -30,17 +30,6 @@ Traditional AI coding assistants require you to be at a desktop. **Pocketable br
 - 🔒 **Self-Hosted** — Your code stays private in Daytona sandboxes
 - 🔓 **Open Source** — MIT licensed, fully customizable
 
-### How It Compares
-
-| Feature | Pocketable | Cursor | VibeCode | Lovable |
-|---------|-----------|--------|----------|---------|
-| 📱 Mobile-Native | ✅ | ❌ | ✅ | ❌ |
-| 🎤 Voice Input | ✅ | ❌ | ❌ | ❌ |
-| 👁️ Live Preview | ✅ | ❌ | ✅ | ✅ |
-| 🤖 Multi-Model | ✅ Claude + GPT | ✅ | ❌ | ❌ |
-| 🔓 Open Source | ✅ | ❌ | ❌ | ❌ |
-| 🏗️ Self-Hosted | ✅ | ❌ | ❌ | ❌ |
-
 ---
 
 ## 🎯 Features
