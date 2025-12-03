@@ -19,11 +19,10 @@
 
 ## ✨ Why Pocketable?
 
-> Build production-ready React Native apps using just your voice, on your phone, while commuting.
+> Build production-ready React Native apps using just your phone, while commuting.
 
 Traditional AI coding assistants require you to be at a desktop. **Pocketable brings Claude Sonnet 4.5 and GPT-5 to your mobile device.**
 
-- 🎤 **Voice-First** — Speak your app idea, get working code via Whisper
 - 👁️ **Live Previews** — See results instantly with Expo Snack integration
 - 🖼️ **Image-to-Code** — Convert UI screenshots to React Native components
 - 🤖 **Dual AI** — Switch between Claude Sonnet 4.5 & GPT-5 mid-conversation
