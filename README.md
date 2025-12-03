@@ -1,324 +1,426 @@
-# Pocketable
+<div align="center">
 
-**AI-Powered Mobile App Builder** - Build React Native apps through voice, text, or images using advanced AI models.
+# 📱 Pocketable
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![React Native](https://img.shields.io/badge/React%20Native-0.81-blue.svg)
-![Expo](https://img.shields.io/badge/Expo-SDK%2054-000020.svg)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)
+### Build React Native apps with AI — right from your phone
 
-## Overview
+**Mobile-first AI coding assistant powered by Claude Sonnet 4.5 & GPT-5**
 
-Pocketable is a mobile-first development platform that enables developers to create React Native applications using natural language, voice commands, and visual inputs. Powered by cutting-edge AI models (Claude Sonnet 4.5 and GPT-5), it provides real-time code generation, live preview, and multimodal interaction.
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![React Native](https://img.shields.io/badge/React_Native-0.81-61DAFB?logo=react)](https://reactnative.dev/)
+[![Expo](https://img.shields.io/badge/Expo-54-000020?logo=expo)](https://expo.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 
-### Key Features
+[⚡ Quick Start](#-quick-start) • [🎯 Features](#-features) • [📖 Docs](#-documentation) • [🚀 Deploy](#-deployment)
 
-- **Dual AI Models** - Switch between Claude Sonnet 4.5 and GPT-5
-- **Multimodal Input** - Text, voice, and image-based interactions
-- **Live Preview** - Real-time app preview via Expo Snack integration
-- **Project Management** - Save, load, and share projects with Supabase
-- **Real-time Streaming** - WebSocket-based AI response streaming
-- **Export & Share** - Export conversations and share preview URLs
-
-## Quick Start
-
-### Prerequisites
-
-- Node.js 18 or higher
-- npm or yarn
-- Expo CLI: `npm install -g expo-cli`
-- iOS Simulator or Android Emulator (or Expo Go app)
-
-### Installation
-
-1. **Clone the repository**
-```bash
-git clone https://github.com/Snorman-zzz/Pocketable.git
-cd Pocketable
-```
-
-2. **Set up Backend**
-```bash
-cd pocketable/backend
-npm install
-```
-
-Create `.env` file in `backend/`:
-```env
-# Required API Keys
-ANTHROPIC_API_KEY=sk-ant-api03-...
-OPENAI_API_KEY=sk-...
-
-# Server Configuration
-PORT=3001
-
-# Optional: Supabase (for project persistence)
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
-```
-
-3. **Set up Mobile App**
-```bash
-cd ../mobile
-npm install
-```
-
-4. **Run the Application**
-
-Start backend (in `pocketable/backend/`):
-```bash
-npm run dev
-```
-
-Start mobile app (in `pocketable/mobile/`):
-```bash
-npm start
-```
-
-Then press `i` for iOS or `a` for Android.
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                     Mobile App                          │
-│              (React Native + Expo)                      │
-│                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │     Chat     │  │   Projects   │  │   Preview    │ │
-│  └──────────────┘  └──────────────┘  └──────────────┘ │
-└─────────────────────────────────────────────────────────┘
-                         │
-                   WebSocket (Socket.io)
-                         │
-┌─────────────────────────────────────────────────────────┐
-│                 Backend Server                          │
-│              (Node.js + Express)                        │
-│                                                         │
-│              ┌──────────────────┐                       │
-│              │  Agent Factory   │                       │
-│              └────────┬─────────┘                       │
-│                       │                                 │
-│         ┌─────────────┴──────────────┐                  │
-│         │                            │                  │
-│  ┌──────▼───────┐          ┌─────────▼────────┐        │
-│  │    Claude    │          │       GPT-5      │        │
-│  │  Adapter     │          │     Adapter      │        │
-│  └──────────────┘          └──────────────────┘        │
-└─────────────────────────────────────────────────────────┘
-                         │
-                ┌────────┴─────────┐
-                │                  │
-         ┌──────▼──────┐    ┌──────▼──────┐
-         │  Supabase   │    │ Expo Snack  │
-         │  (Storage)  │    │  (Preview)  │
-         └─────────────┘    └─────────────┘
-```
-
-### Technology Stack
-
-**Mobile:**
-- React Native 0.81
-- Expo SDK 54
-- TypeScript
-- Expo Router (file-based navigation)
-- Zustand (state management)
-- Socket.io Client
-- react-native-webview
-- expo-av (voice recording)
-- expo-image-picker
-
-**Backend:**
-- Node.js + Express
-- TypeScript
-- Socket.io Server
-- Anthropic SDK (Claude)
-- OpenAI SDK (GPT-5, Whisper)
-- Supabase Client
-- Expo Snack SDK
-
-**Design:**
-- Minimalist black theme (#0F0F0F)
-- Purple accent (#8B5CF6)
-- High contrast typography
-- Emoji-free professional interface
-
-## Project Structure
-
-```
-Pocketable/
-├── pocketable/
-│   ├── mobile/                # React Native + Expo app
-│   │   ├── app/              # Expo Router screens
-│   │   │   ├── index.tsx     # Main chat interface
-│   │   │   ├── settings.tsx  # Settings & documentation
-│   │   │   └── preview.tsx   # Full-screen preview
-│   │   └── src/
-│   │       ├── components/   # Reusable UI components
-│   │       ├── stores/       # Zustand state stores
-│   │       ├── services/     # API clients & utilities
-│   │       └── theme/        # Design system
-│   │
-│   ├── backend/              # Node.js backend
-│   │   └── src/
-│   │       ├── agents/       # AI model adapters
-│   │       ├── config/       # Configuration & prompts
-│   │       ├── routes/       # API routes
-│   │       ├── services/     # Business logic
-│   │       ├── tools/        # Utilities (Snack API)
-│   │       └── server.ts     # Main server
-│   │
-│   └── terraform/            # Infrastructure as Code
-│
-├── daytona/                  # Development environment
-└── waitlist-website/         # Landing page
-```
-
-## Usage
-
-### Chat Interface
-
-1. **Select AI Model** - Tap the model picker to switch between Claude Sonnet 4.5 and GPT-5
-2. **Choose Mode**:
-   - **Auto** - AI decides whether to plan or build
-   - **Plan** - AI presents a plan for approval before building
-   - **Build** - AI generates code immediately
-3. **Input Options**:
-   - **Text** - Type your app idea
-   - **Voice** - Tap microphone, speak, then stop to transcribe
-   - **Image** - Upload screenshots for UI inspiration
-4. **View Preview** - Tap the preview button when code is generated
-
-### Project Management
-
-- **Create Project** - Start a new project from the sidebar
-- **Save Progress** - Projects auto-save to Supabase (if configured)
-- **Load Project** - Select from your project list
-- **Share** - Export conversation or share preview URL
-
-### Voice Input
-
-1. Tap the microphone button (⦿)
-2. Speak naturally describing your app
-3. Tap stop when finished
-4. Review the transcription (powered by Whisper)
-5. Send to AI for processing
-
-### Image Upload
-
-1. Tap the plus button (+)
-2. Select an image from your gallery
-3. AI analyzes the image using vision models
-4. Description is added to your message
-5. Great for UI mockups, logos, and design inspiration
-
-## Supabase Setup (Optional)
-
-For project persistence and multi-device sync:
-
-1. Create a project at [supabase.com](https://supabase.com)
-2. Copy project URL and anon key to `backend/.env`
-3. Run the schema:
-   - Open Supabase SQL Editor
-   - Execute `backend/src/config/supabase-schema.sql`
-4. Restart the backend server
-
-Without Supabase, the app works for single sessions but won't persist projects.
-
-## API Keys
-
-### Required
-
-- **ANTHROPIC_API_KEY** - For Claude Sonnet 4.5 functionality
-  - Get yours at: https://console.anthropic.com/
-- **OPENAI_API_KEY** - For GPT-5, voice transcription, and image analysis
-  - Get yours at: https://platform.openai.com/
-
-### Optional
-
-- **SUPABASE_URL** & **SUPABASE_ANON_KEY** - For project storage
-
-## Development
-
-### Backend Development
-
-```bash
-cd pocketable/backend
-npm run dev        # Start with hot reload
-npm run build      # Compile TypeScript
-npm start          # Production mode
-```
-
-### Mobile Development
-
-```bash
-cd pocketable/mobile
-npm start                    # Start Expo
-npm run start:local          # Use local backend
-npm run build:preview        # Build for testing
-npm run build:production     # Production build
-```
-
-### Testing
-
-```bash
-# Check backend health
-curl http://localhost:3001/health
-
-# Test Snack API
-curl http://localhost:3001/test-snack
-```
-
-## Features
-
-### Completed ✅
-
-- [x] Real-time AI chat with streaming responses
-- [x] Dual AI model support (Claude & GPT-5)
-- [x] WebSocket-based communication
-- [x] In-app live preview with Expo Snack
-- [x] Voice input with Whisper transcription
-- [x] Image upload with AI vision analysis
-- [x] Project management with Supabase
-- [x] Export conversations and share previews
-- [x] Drawer navigation (ChatGPT-style)
-- [x] Platform toggle (iOS/Android/Web)
-
-### Roadmap
-
-- [ ] Web companion app
-- [ ] QR code generation for testing
-- [ ] Multi-file project support
-- [ ] User authentication
-- [ ] Rate limiting and cost controls
-- [ ] Unit and E2E tests
-- [ ] Production deployment with EAS
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Built with [Anthropic's Claude](https://www.anthropic.com/)
-- Powered by [OpenAI's GPT](https://openai.com/)
-- Preview by [Expo Snack](https://snack.expo.dev/)
-- Storage by [Supabase](https://supabase.com/)
-
-## Support
-
-For issues, questions, or contributions, please visit our [GitHub Issues](https://github.com/Snorman-zzz/Pocketable/issues) page.
+</div>
 
 ---
 
-Made with ❤️ for developers who dream in code
+## ✨ Why Pocketable?
+
+> Build production-ready React Native apps using just your voice, on your phone, while commuting.
+
+Traditional AI coding assistants require you to be at a desktop. **Pocketable brings Claude Sonnet 4.5 and GPT-5 to your mobile device.**
+
+- 🎤 **Voice-First** — Speak your app idea, get working code via Whisper
+- 👁️ **Live Previews** — See results instantly with Expo Snack integration
+- 🖼️ **Image-to-Code** — Convert UI screenshots to React Native components
+- 🤖 **Dual AI** — Switch between Claude Sonnet 4.5 & GPT-5 mid-conversation
+- 🔒 **Self-Hosted** — Your code stays private in Daytona sandboxes
+- 🔓 **Open Source** — MIT licensed, fully customizable
+
+### How It Compares
+
+| Feature | Pocketable | Cursor | VibeCode | Lovable |
+|---------|-----------|--------|----------|---------|
+| 📱 Mobile-Native | ✅ | ❌ | ✅ | ❌ |
+| 🎤 Voice Input | ✅ | ❌ | ❌ | ❌ |
+| 👁️ Live Preview | ✅ | ❌ | ✅ | ✅ |
+| 🤖 Multi-Model | ✅ Claude + GPT | ✅ | ❌ | ❌ |
+| 🔓 Open Source | ✅ | ❌ | ❌ | ❌ |
+| 🏗️ Self-Hosted | ✅ | ❌ | ❌ | ❌ |
+
+---
+
+## 🎯 Features
+
+<table>
+<tr>
+<td width="50%">
+
+### 🧠 Dual AI Power
+- **Claude Sonnet 4.5** for best-in-class code generation
+- **GPT-5** for alternative approaches
+- Switch models mid-conversation
+- Smart routing based on task type
+
+</td>
+<td width="50%">
+
+### 🗣️ Multimodal Input
+- 🎤 **Voice-to-Code** via OpenAI Whisper
+- 📷 **Image-to-Code** via Vision API
+- ⌨️ **Text Chat** with streaming responses
+- 🔄 Mix and match input modes
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 👁️ Live Previews
+- Instant Expo Snack integration
+- iOS/Android/Web platform toggle
+- Share working demos via URL
+- Real-time code updates
+
+</td>
+<td width="50%">
+
+### 🔐 Secure Execution
+- Daytona sandbox isolation
+- Ephemeral containers
+- Self-hosted deployment option
+- No code exposure to third parties
+
+</td>
+</tr>
+</table>
+
+**Additional Features:**
+- ✅ Real-time AI streaming responses
+- ✅ Project management with Supabase
+- ✅ Export conversations as Markdown
+- ✅ Code snippet copying
+- ✅ Auto/Plan/Build modes
+
+---
+
+## ⚡ Quick Start
+
+> Get running in 5 minutes
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/Snorman-zzz/pocketable.git
+cd pocketable
+
+# 2. Start Daytona (self-hosted sandbox)
+cd ../daytona/docker && docker compose up -d
+
+# 3. Configure and start backend
+cd ../../pocketable/backend
+# Add your API keys to .env (see Environment Setup below)
+npm install && npm run dev
+
+# 4. Start mobile app (new terminal)
+cd ../mobile
+npm install && npm run start:local
+```
+
+Press `i` for iOS or `a` for Android. **Done!** 🎉
+
+> [!TIP]
+> First time? See **[QUICKSTART.md](QUICKSTART.md)** for detailed setup including Daytona configuration.
+
+> [!IMPORTANT]
+> **Required API Keys:**
+> - `ANTHROPIC_API_KEY` — For Claude Sonnet 4.5
+> - `OPENAI_API_KEY` — For GPT-5, Whisper transcription, and Vision API
+> - Daytona credentials — See [DAYTONA-SETUP.md](DAYTONA-SETUP.md)
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+graph TB
+    A[📱 Mobile App<br/>React Native + Expo] -->|WebSocket| B[⚡ Backend API<br/>Node.js + Express]
+    B -->|Agent Factory| C[🤖 Claude SDK<br/>Sonnet 4.5]
+    B -->|Agent Factory| D[🤖 OpenAI SDK<br/>GPT-5, Whisper]
+    C --> E[🏗️ Daytona SDK<br/>Sandbox Manager]
+    D --> E
+    E -->|Docker| F[🐳 Ephemeral Sandboxes<br/>Isolated Containers]
+
+    style A fill:#8B5CF6
+    style B fill:#3B82F6
+    style C fill:#10B981
+    style D fill:#F59E0B
+    style E fill:#EF4444
+    style F fill:#6366F1
+```
+
+**Flow:** Voice/Text/Image → Backend → AI Model → Code Execution → Live Preview
+
+<details>
+<summary><b>Detailed Architecture</b></summary>
+
+### Dual-Process Communication
+
+```
+Mobile (Expo) ←→ WebSocket (Socket.io) ←→ Backend (Express)
+                                           ↓
+                                    Agent Factory
+                                    ↓         ↓
+                              ClaudeAdapter  CodexAdapter
+                                    ↓         ↓
+                              Claude SDK   OpenAI SDK
+```
+
+The backend streams AI responses in real-time via Socket.io:
+- `chat` → Mobile sends message
+- `message_chunk` → Backend streams response chunks
+- `snack_ready` → Preview URL ready
+- `complete` → Response finished
+- `error` → Error occurred
+
+For complete architecture details, see **[CLAUDE.md](CLAUDE.md)**.
+
+</details>
+
+---
+
+## 💡 Usage
+
+### Build a Todo App with Voice
+
+1. Open Pocketable app
+2. Tap 🎤 microphone button
+3. Say: *"Create a todo list app with purple theme and categories"*
+4. Watch AI generate code in real-time ⚡
+5. Tap **"Preview"** to see your app running!
+
+**Result:** Working app in 30 seconds.
+
+### Convert Screenshot to Code
+
+1. Take screenshot of any UI you like
+2. Tap 📷 camera button and upload
+3. Type: *"Recreate this UI in React Native"*
+4. AI analyzes image and generates matching components
+5. Iterate and refine!
+
+### Switch Between AI Models
+
+1. Build initial version with Claude Sonnet 4.5
+2. Tap model picker → Switch to GPT-5
+3. Ask: *"Refactor this to use Zustand for state"*
+4. Compare different AI approaches
+5. Pick the best implementation!
+
+---
+
+## 🔧 Environment Setup
+
+### Prerequisites
+
+- Node.js 18+
+- Docker (for Daytona)
+- iOS Simulator / Android Emulator / Expo Go app
+
+### Backend Configuration
+
+Create `backend/.env`:
+
+```env
+# AI Model APIs
+ANTHROPIC_API_KEY=sk-ant-api03-...     # Required for Claude Sonnet 4.5
+OPENAI_API_KEY=sk-...                   # Required for GPT-5, Whisper, Vision
+
+# Self-Hosted Daytona
+DAYTONA_API_KEY=<from-daytona-setup>
+DAYTONA_API_URL=http://localhost:3000/api
+DAYTONA_ORGANIZATION_ID=<from-daytona-setup>
+DAYTONA_TARGET=us
+
+# Database (Optional - enables project persistence)
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+DATABASE_URL=postgresql://user:pass@localhost:5432/pocketable
+
+# Server
+PORT=3001
+ROUTING_ENABLED=true
+```
+
+**Get Daytona credentials:**
+```bash
+cd /path/to/daytona/docker
+docker compose logs api | grep "Admin user created with API key:"
+docker compose exec -T db psql -U user -d daytona -c "SELECT id FROM organization;"
+```
+
+See **[DAYTONA-SETUP.md](DAYTONA-SETUP.md)** for complete Daytona setup.
+
+<details>
+<summary><b>Supabase Setup (Optional)</b></summary>
+
+Enables project persistence across sessions:
+
+1. Create project at [supabase.com](https://supabase.com)
+2. Copy URL and anon key to `.env`
+3. Run `backend/src/config/supabase-schema.sql` in Supabase SQL Editor
+4. Verify: `curl http://localhost:3001/health` → `"supabase": "connected"`
+
+**Without Supabase:** Projects work but aren't saved between app restarts.
+
+</details>
+
+---
+
+## 🚀 Deployment
+
+### Mobile App (Expo EAS)
+
+```bash
+cd mobile
+
+# Build for all platforms
+npm run build:production
+
+# Or build for specific platforms
+npm run build:ios         # iOS only
+npm run build:android     # Android only
+```
+
+Update `mobile/.env.production`:
+```env
+EXPO_PUBLIC_API_URL=https://api.yourdomain.com
+```
+
+### Backend (Production)
+
+```bash
+cd backend
+npm install
+npm run build
+npm start
+```
+
+**Required environment variables:**
+- All variables from [Environment Setup](#-environment-setup)
+- Update `DAYTONA_API_URL` to your production Daytona instance
+
+**Deployment Guides:**
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** — Cloud deployment with custom Daytona snapshots
+- **[AWS-DEPLOYMENT.md](AWS-DEPLOYMENT.md)** — AWS-specific guide
+- **[INFRASTRUCTURE.md](INFRASTRUCTURE.md)** — Infrastructure architecture
+
+---
+
+## 🗺️ Roadmap
+
+### ✅ Shipped
+- [x] Dual AI support (Claude Sonnet 4.5 + GPT-5)
+- [x] Voice input with Whisper transcription
+- [x] Image upload with Vision API
+- [x] Live Expo Snack previews
+- [x] Project persistence with Supabase
+- [x] Self-hosted Daytona integration
+- [x] Export and sharing features
+
+### 🚧 In Progress
+- [ ] Web companion app with QR codes
+- [ ] Multi-file code extraction
+- [ ] Error boundaries and retry logic
+
+### 🔮 Planned
+- [ ] iOS App Store release
+- [ ] Android Play Store release
+- [ ] User authentication (Supabase Auth)
+- [ ] Team collaboration features
+- [ ] Template marketplace
+- [ ] GitHub integration
+- [ ] VSCode extension
+- [ ] Custom AI model fine-tuning
+
+**Want to influence the roadmap?** Open a [discussion](https://github.com/Snorman-zzz/pocketable/discussions)!
+
+---
+
+## 🛠️ Tech Stack
+
+### Mobile
+![React Native](https://img.shields.io/badge/React_Native-0.81-61DAFB?style=for-the-badge&logo=react)
+![Expo](https://img.shields.io/badge/Expo-54-000020?style=for-the-badge&logo=expo)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript)
+![Zustand](https://img.shields.io/badge/Zustand-5.0-orange?style=for-the-badge)
+
+### Backend
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js)
+![Express](https://img.shields.io/badge/Express-5.1-000000?style=for-the-badge&logo=express)
+![Socket.io](https://img.shields.io/badge/Socket.io-4.0-010101?style=for-the-badge&logo=socket.io)
+![Prisma](https://img.shields.io/badge/Prisma-6.17-2D3748?style=for-the-badge&logo=prisma)
+
+### AI & Infrastructure
+![Claude](https://img.shields.io/badge/Claude-Sonnet_4.5-5A67D8?style=for-the-badge)
+![OpenAI](https://img.shields.io/badge/OpenAI-GPT--5-412991?style=for-the-badge)
+![Daytona](https://img.shields.io/badge/Daytona-Sandbox-FF6B6B?style=for-the-badge)
+![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase)
+
+---
+
+## 🔧 Troubleshooting
+
+<details>
+<summary><b>Backend won't start</b></summary>
+
+```bash
+# Kill existing processes
+pkill -f "tsx watch src/server.ts"
+
+# Check port is free
+lsof -i :3001
+
+# Restart
+cd backend && npm run dev
+```
+</details>
+
+<details>
+<summary><b>"Invalid API key" error (Daytona)</b></summary>
+
+```bash
+# Get new API key from logs
+cd /path/to/daytona/docker
+docker compose logs api | grep "Admin user created"
+
+# Update backend/.env with new key
+# Restart backend
+pkill -f "tsx watch" && cd backend && npm run dev
+```
+</details>
+
+<details>
+<summary><b>Mobile can't connect to backend</b></summary>
+
+1. Verify backend is running: `curl http://localhost:3001/health`
+2. Check `mobile/.env.development` has `EXPO_PUBLIC_API_URL=http://localhost:3001`
+3. Ensure mobile and backend are on same network (for physical devices)
+</details>
+
+<details>
+<summary><b>Slow code generation (>90 seconds)</b></summary>
+
+1. Check backend logs for "Sandbox image: ubuntu-node20"
+2. If missing, Node.js isn't pre-installed in Daytona snapshot
+3. See **[DEPLOYMENT.md](DEPLOYMENT.md)** for snapshot optimization
+</details>
+
+<details>
+<summary><b>Voice input not working</b></summary>
+
+1. Verify `OPENAI_API_KEY` is set in `backend/.env`
+2. Check microphone permissions on device
+3. Check backend logs for Whisper API errors
+</details>
+
+---
+
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+---
