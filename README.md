@@ -23,7 +23,7 @@
 
 Traditional AI coding assistants require you to be at a desktop. **Pocketable brings Claude Sonnet 4.5 and GPT-5 to your mobile device.**
 
-- 👁️ **Live Previews** — See results instantly with Expo Snack integration
+- 👁️ **Live Previews** — See results instantly with Daytona Sandbox integration
 - 🖼️ **Image-to-Code** — Convert UI screenshots to React Native components
 - 🤖 **Dual AI** — Switch between Claude Sonnet 4.5 & GPT-5 mid-conversation
 - 🔒 **Self-Hosted** — Your code stays private in Daytona sandboxes
